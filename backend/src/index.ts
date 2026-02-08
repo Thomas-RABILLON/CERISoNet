@@ -5,20 +5,12 @@ import router from "./interface/routes/route";
 const https = require('https');
 const fs = require('fs');
 
-var session = require('express-session')
-
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
-app.use(session({
-	secret: 'test',
-	saveUninitialized: false,
-	resave: false,
-	cookie : {maxAge : 24 * 3600 * 1000}
-}))
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'))
+app.get('/', (_, res) => res.sendFile(__dirname + '/index.html'))
 app.use('/api', router);
 
 const options = {

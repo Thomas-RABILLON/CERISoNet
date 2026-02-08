@@ -1,0 +1,33 @@
+# Git et IDE
+.git
+.gitignore
+.cursor
+.vscode
+*.md
+!README.md
+
+# Dépendances et build (reconstruits dans l’image)
+**/node_modules
+**/dist
+**/.npm
+**/*.tsbuildinfo
+
+# Fichiers sensibles / env (à fournir au runtime)
+.env
+.env.*
+!.env.example
+
+# Logs et cache
+**/*.log
+**/.eslintcache
+**/.cache
+
+# Tests et couverture
+**/coverage
+**/.nyc_output
+**/__tests__
+**/*.test.ts
+**/*.spec.ts
+
+# Optionnel : exclure le frontend si seul le backend est servi dans cette image
+# frontend

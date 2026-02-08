@@ -1,12 +1,17 @@
 import { Router } from "express";
-import authRoute from "./auth/route";
 
 const router = Router();
 
-router.use('/auth', authRoute);
-
 router.get("/", (req, res) => {
     res.send("Hello World");
+});
+
+router.post('/auth/login/', (req, res) => {
+    const { username, pwd } = req.body
+
+    console.log('username : ' + username + ', password : ' + pwd)
+
+    res.sendStatus(200)
 });
 
 export default router;

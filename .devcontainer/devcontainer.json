@@ -1,0 +1,12 @@
+{
+  "name": "CERISoNet (Debian 11 + Node 20)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/app",
+  "remoteUser": "root",
+  "customizations": {
+    "vscode": {
+      "extensions": []
+    }
+  }
+}
