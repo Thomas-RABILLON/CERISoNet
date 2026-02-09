@@ -16,7 +16,7 @@ app.post('/login', (req, res) => {
 
     console.log('username : ' + username + ', password : ' + pwd)
 
-    res.send('Connecté en avec: username : ' + username + ', password : ' + pwd)
+    res.send('Connecté')
 });
 
 const options = {
