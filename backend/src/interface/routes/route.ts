@@ -11,7 +11,7 @@ router.post('/auth/login/', (req, res) => {
 
     console.log('username : ' + username + ', password : ' + pwd)
 
-    res.sendStatus(200)
+    res.send('Connecté en avec: username : ' + username + ', password : ' + pwd)
 });
 
 export default router;
