@@ -1,6 +1,5 @@
 import express from "express";
 import config from "./config/config";
-import router from "./interface/routes/route";
 
 const https = require('https');
 const fs = require('fs');
@@ -11,7 +10,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (_, res) => res.sendFile(__dirname + '/index.html'))
-app.use('/api', router);
+
+app.post('/login', (req, res) => {
+    const { username, pwd } = req.body
+
+    console.log('username : ' + username + ', password : ' + pwd)
+
+    res.send('Connecté en avec: username : ' + username + ', password : ' + pwd)
+});
 
 const options = {
 	key: fs.readFileSync('./ssl/key.pem'),
