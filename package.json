@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc && cp src/index.html dist/src/index.html",
+    "build": "tsc && cp src/index.html dist/",
     "start": "node dist/index.js",
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write \"src/**/*.ts\""
@@ -30,4 +30,5 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }
+
 }
