@@ -10,12 +10,13 @@
   },
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc && cp src/index.html dist/",
+    "build": "tsc && cp server/index.html dist/",
     "start": "node dist/index.js",
-    "lint": "eslint src/**/*.ts",
-    "format": "prettier --write \"src/**/*.ts\""
+    "lint": "eslint server/**/*.ts",
+    "format": "prettier --write \"server/**/*.ts\""
   },
   "dependencies": {
+    "@angular/cli": "^21.2.2",
     "@types/connect-mongodb-session": "^2.4.8",
     "@types/pg": "^8.18.0",
     "connect-mongodb-session": "^5.0.0",

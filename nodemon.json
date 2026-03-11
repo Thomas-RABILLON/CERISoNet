@@ -1,13 +1,13 @@
 {
     "watch": [
-        "src"
+        "server"
     ],
     "legacyWatch": true,
     "ext": "ts,json",
-    "exec": "ts-node --files src/index.ts",
+    "exec": "ts-node --files server/index.ts",
     "ignore": [
-        "src/**/*.test.ts",
-        "src/**/*.spec.ts",
+        "server/**/*.test.ts",
+        "server/**/*.spec.ts",
         "node_modules"
     ]
 }
