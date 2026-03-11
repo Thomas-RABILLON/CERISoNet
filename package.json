@@ -16,15 +16,17 @@
     "format": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
+    "@types/connect-mongodb-session": "^2.4.8",
     "@types/pg": "^8.18.0",
+    "connect-mongodb-session": "^5.0.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "express-session": "^1.18.1",
+    "express-session": "^1.19.0",
     "pg": "^8.20.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/express-session": "^1.18.1",
+    "@types/express-session": "^1.18.2",
     "@types/node": "^20.17.17",
     "eslint": "^9.19.0",
     "nodemon": "^3.1.9",
