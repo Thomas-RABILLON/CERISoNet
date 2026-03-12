@@ -14,7 +14,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static('/app/CERISoNet/dist/CERISoNet/browser'));
+// app.use(express.static('/app/CERISoNet/dist/CERISoNet/browser'));
+app.use(express.static('/home/thomas/Documents/AMS/CERISoNet/CERISoNet/dist/CERISoNet/browser'));
 
 app.use(session({
 	secret: config.mongo.SECRET,

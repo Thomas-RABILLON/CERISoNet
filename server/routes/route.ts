@@ -5,9 +5,6 @@ import config from "../config/config";
 
 const router = Router();
 
-// router.get('/', (_, res) => res.sendFile(__dirname + '/index.html'));
-// router.get('/', (_, res) => res.sendFile('/home/thomas/Documents/AMS/CERISoNet/src/index.html'));
-
 const pool = new Pool({
     user: config.postgres.USER,
     host: config.postgres.HOST,
@@ -22,14 +19,18 @@ router.post('/api/login', (req, res) => {
     pool.connect((err, client, done) => {
         if (err) {
             console.log('Error connecting to pg server' + err.stack);
-            res.sendStatus(500).send('Erreur de connexion à la base de données');
+            res.status(500).json({
+                message: 'Error connecting to pg server'
+            });
         } else {
             console.log('Connection established / pg db server');
 
             client?.query("SELECT * FROM fredouil.compte WHERE mail = '" + email + "';", (err, result) => {
                 if (err) {
                     console.log('Erreur d’exécution de la requete' + err.stack);
-                    res.sendStatus(500).send('Erreur d’exécution de la requete' + err.stack)
+                    res.status(500).json({
+                        message: 'Erreur d’exécution de la requete'
+                    });
                     return;
                 }
 
@@ -43,17 +44,20 @@ router.post('/api/login', (req, res) => {
                     req.session.save();
 
                     console.log('Connexion établie');
-                    res.send({
-                        isConnected: true,
+                    res.json({
+                        idUser: Number(user.id),
                         email: email,
-                        idUser: Number(user.id)
+                        username: user.pseudo,
+                        lastLogin: new Date(),
+                        isConnected: true,
                     });
                 } else {
-                    console.log('Connexion échouée : informations de connexion incorrecte');
-                    res.sendStatus(401).send('Connexion échouée : informations de connexion incorrecte')
+                    console.log('Connexion échouée : identifiant ou mot de passe incorrecte');
+                    res.status(401).json({
+                        message: 'identifiant ou mot de passe incorrecte'
+                    })
                 }
             });
-            done();
         }
     });
 });
@@ -69,7 +73,6 @@ router.get('/logout', (req, res) => {
             console.log('Connection established / pg db server');
 
             client?.query("UPDATE fredouil.compte SET statut_connexion = 0 WHERE id = " + Number(idUser) + ";");
-            done();
         }
     });
 
