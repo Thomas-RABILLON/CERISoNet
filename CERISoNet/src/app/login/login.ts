@@ -15,7 +15,6 @@ interface LoginData {
 })
 export class Login {
     toastr = inject(ToastrService);
-
     loginModel = signal<LoginData>({
         email: '',
         password: ''
@@ -35,9 +34,9 @@ export class Login {
         fetch('/api/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(formData)
         }).then(async (res) => {
             if (res.ok) {
                 const { idUser, email, username, lastLogin, isConnected } = await res.json() as {
