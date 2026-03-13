@@ -1,6 +1,6 @@
-import { request, Router } from "express";
-import crypto, { createHash, createHmac } from "crypto";
-import { Connection, Pool } from "pg";
+import { Router } from "express";
+import { createHash } from "crypto";
+import { Pool } from "pg";
 import config from "../config/config";
 
 const router = Router();
@@ -55,20 +55,22 @@ router.post('/api/login', (req, res) => {
                     console.log('Connexion échouée : identifiant ou mot de passe incorrecte');
                     res.status(401).json({
                         message: 'identifiant ou mot de passe incorrecte'
-                    })
+                    });
                 }
             });
         }
     });
 });
 
-router.get('/logout', (req, res) => {
+router.get('/api/logout', (req, res) => {
     const idUser = req.session.idUser;
 
     pool.connect((err, client, done) => {
         if (err) {
             console.log('Error connecting to pg server' + err.stack);
-            res.sendStatus(500).send('Erreur de connexion à la base de données');
+            res.status(500).json({
+                message: 'Erreur de connexion à la base de données'
+            });
         } else {
             console.log('Connection established / pg db server');
 
@@ -79,10 +81,14 @@ router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             console.log('Error destroying session' + err.stack);
-            res.sendStatus(500).send('Erreur de déconnexion');
+            res.status(500).json({
+                message: 'Erreur de déconnexion'
+            });
         } else {
             console.log('Session destroyed');
-            res.send('Déconnecté');
+            res.json({
+                message: 'Déconnecté'
+            });
         }
     });
 });

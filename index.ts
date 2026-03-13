@@ -1,11 +1,9 @@
 import express from "express";
 import config from "./config/config";
 import router from "./routes/route";
-
 import session from "express-session";
 
 const MongoDBStore = require("connect-mongodb-session")(session);
-
 const https = require('https');
 const fs = require('fs');
 

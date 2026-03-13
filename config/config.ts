@@ -17,10 +17,10 @@ const config = {
   },
   mongo: {
     SECRET: String(process.env.SESSION_SECRET) || 'mysecret',
-    HOST: process.env.MONGO_HOST,
-    PORT: Number(process.env.MONGO_PORT),
-    DB: process.env.MONGO_DB,
-    COLLECTION: String(process.env.MONGO_COLLECTION)
+    HOST: process.env.MONGO_HOST || 'localhost',
+    PORT: Number(process.env.MONGO_PORT) || 27017,
+    DB: process.env.MONGO_DB || 'db-CERI',
+    COLLECTION: String(process.env.MONGO_COLLECTION) || 'MySession3117'
   }
 };
 
