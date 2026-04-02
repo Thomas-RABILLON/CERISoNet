@@ -25,7 +25,7 @@ app.use(session({
 	cookie: { maxAge: 24 * 3600 * 1000 }
 }));
 
-app.use(router);
+app.use('/api', router);
 
 const options = {
 	key: fs.readFileSync('./ssl/key.pem'),

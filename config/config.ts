@@ -20,7 +20,8 @@ const config = {
     HOST: process.env.MONGO_HOST || 'localhost',
     PORT: Number(process.env.MONGO_PORT) || 27017,
     DB: process.env.MONGO_DB || 'db-CERI',
-    COLLECTION: String(process.env.MONGO_COLLECTION) || 'MySession3117'
+    COLLECTION: String(process.env.MONGO_COLLECTION) || 'MySession3117',
+    POST_COLLECTION: String(process.env.MONGO_POST_COLLECTION) || 'CERISoNet'
   }
 };
 
