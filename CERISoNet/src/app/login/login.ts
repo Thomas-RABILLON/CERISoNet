@@ -56,6 +56,7 @@ export class Login {
                 localStorage.setItem('isConnected', String(isConnected));
 
                 this.toastr.success('Bonjour ' + username + ', dernière connexion : ' + lastLoginDate.toLocaleDateString(), 'Connexion');
+                window.location.href = '/home';
             } else if (res.status === 401) {
                 const { message } = await res.json() as { message: string };
                 this.toastr.error(message, 'Erreur de connexion');

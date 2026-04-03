@@ -1,8 +1,8 @@
 <div class="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
-  <header class="w-full bg-white border-b border-slate-200">
+  <header class="sticky top-0 z-50 w-full bg-white border-b border-slate-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3" (click)="scrollToTop()">
           <div class="w-10 h-10 rounded bg-indigo-600 flex items-center justify-center text-white font-bold text-xl">
             C
           </div>
@@ -11,10 +11,46 @@
           </span>
         </div>
         <div class="flex items-center">
+          @if (!isLoggedIn()) {
           <a [routerLink]="['/login']"
             class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             Connexion
           </a>
+          }
+          @else {
+          <div class="relative flex items-center">
+            <button (click)="toggleMenu()"
+              class="flex items-center gap-2 p-1.5 pr-3 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-full border border-slate-100 transition-all shadow-sm hover:shadow-md focus:outline-none z-50">
+              <div
+                class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-indigo-600 text-white flex items-center justify-center font-bold shadow-inner">
+                {{getUserName()?.charAt(0)?.toUpperCase()}}
+              </div>
+              <span class="max-w-[120px] truncate">{{getUserName()}}</span>
+              <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" [class.rotate-180]="isMenuOpen()"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            @if (isMenuOpen()) {
+            <div class="fixed inset-0 z-40 bg-black/0" (click)="toggleMenu()"></div>
+            <div
+              class="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 py-2 z-50 overflow-hidden transform origin-top-right transition-all animate-in fade-in zoom-in duration-200">
+              <button (click)="logout()"
+                class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3 group">
+                <div
+                  class="w-8 h-8 rounded-lg bg-red-100/50 text-red-600 flex items-center justify-center group-hover:bg-red-100 transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                </div>
+                <span class="font-semibold">Déconnexion</span>
+              </button>
+            </div>
+            }
+          </div>
+          }
         </div>
       </div>
     </div>
