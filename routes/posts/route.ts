@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { ObjectId } from "mongodb";
+import { extractHashtags } from "../../utils/postsUtils";
+import { Post, reqPost, PostImage, PostCommentaire } from "../../types/posts";
 import config from "../../config/config";
-import { Post, reqPost } from "../../types/posts";
 
 const MongoClient = require('mongodb').MongoClient;
 
@@ -27,11 +28,11 @@ postsRouter.get('/posts/:low_limit/:high_limit', (req, res) => {
                 hour: p.hour,
                 body: p.body,
                 createdBy: p.createdBy,
-                image: p.image,
+                image: p.image as PostImage,
                 likes: p.likes,
                 likedBy: p.likedBy,
                 hashtags: p.hashtags,
-                comments: p.comments,
+                comments: p.comments as PostCommentaire[],
                 shared: p.shared
             }));
 
@@ -92,29 +93,46 @@ postsRouter.get('/post/:id', (req, res) => {
 postsRouter.post('/post', (req, res) => {
     const post: reqPost = req.body;
 
-    const mongoPromise = MongoClient.connect(dnsMongoDB);
+    const hashtags = extractHashtags(post.contenu);
 
-    mongoPromise.then((client: any) => {
-        if (client) {
-            const db = client.db();
-            const collection = db.collection(config.mongo.POST_COLLECTION);
+    const newPost: Post = {
+        _id: new ObjectId(),
+        date: post.date,
+        hour: post.hour,
+        body: post.contenu,
+        createdBy: post.idUser,
+        image: post.image,
+        likes: 0,
+        likedBy: [],
+        hashtags: hashtags,
+        comments: [],
+        shared: post.shared
+    }
 
-            return collection.insertOne(req.body);
-        }
-    }).then((post: any) => {
-        if (post) {
-            res.status(200).json(post);
-        } else {
-            res.status(500).json({
-                message: 'Erreur d\'insertion du post'
-            });
-        }
-    }).catch((err: any) => {
-        console.error(err);
-        res.status(500).json({
-            message: 'Erreur d\'insertion du post'
-        });
-    });
+    console.log(newPost);
+    // const mongoPromise = MongoClient.connect(dnsMongoDB);
+
+    // mongoPromise.then((client: any) => {
+    //     if (client) {
+    //         const db = client.db();
+    //         const collection = db.collection(config.mongo.POST_COLLECTION);
+
+    //         return collection.insertOne(req.body);
+    //     }
+    // }).then((post: any) => {
+    //     if (post) {
+    //         res.status(200).json(post);
+    //     } else {
+    //         res.status(500).json({
+    //             message: 'Erreur d\'insertion du post'
+    //         });
+    //     }
+    // }).catch((err: any) => {
+    //     console.error(err);
+    //     res.status(500).json({
+    //         message: 'Erreur d\'insertion du post'
+    //     });
+    // });
 });
 
 export default postsRouter;

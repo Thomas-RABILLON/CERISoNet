@@ -4,12 +4,21 @@ interface reqPost {
     idUser: number;
     contenu: string;
     image: PostImage;
-    date: Date;
+    date: string;
+    hour: string;
+    shared: ObjectId;
 }
 
 interface PostImage {
     url: string;
     title: string;
+}
+
+interface PostCommentaire {
+    commentedBy: number;
+    text: string;
+    date: string;
+    hour: string;
 }
 
 interface Post {
@@ -22,8 +31,8 @@ interface Post {
     likes: number;
     likedBy: number[];
     hashtags: string[];
-    comments: string[];
+    comments: PostCommentaire[];
     shared: ObjectId;
 }
 
-export type { reqPost, Post };
+export type { reqPost, Post, PostCommentaire, PostImage };
