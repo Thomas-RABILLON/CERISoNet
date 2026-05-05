@@ -16,7 +16,7 @@ const extractHashtags = (text: string): string[] => {
     return [];
 }
 
-const getPostById = async (id: string) => {
+const getPostById = async (id: string, idUser: number) => {
     try {
         const client = await MongoClient.connect(dnsMongoDB);
         const db = client.db();
@@ -27,7 +27,7 @@ const getPostById = async (id: string) => {
             return null;
         }
 
-        const postsArray = await readyToSend([res]);
+        const postsArray = await readyToSend([res], idUser);
         return postsArray[0] || null;
     } catch (err) {
         console.error(err);
@@ -35,7 +35,7 @@ const getPostById = async (id: string) => {
     }
 }
 
-const readyToSend = async (posts: any[]): Promise<Post[]> => {
+const readyToSend = async (posts: any[], idUser: number): Promise<Post[]> => {
     await Promise.all(posts.map(async p => {
         p.createdBy = await getUserById(p.createdBy);
         if (p.comments && p.comments.length > 0) {
@@ -45,7 +45,7 @@ const readyToSend = async (posts: any[]): Promise<Post[]> => {
         }
         if (p.shared) {
             const id_shared: ObjectId = p.shared;
-            p.shared = await getPostById(id_shared.toString());
+            p.shared = await getPostById(id_shared.toString(), idUser);
         }
     }));
 
@@ -60,7 +60,8 @@ const readyToSend = async (posts: any[]): Promise<Post[]> => {
         likedBy: p.likedBy,
         hashtags: p.hashtags,
         comments: p.comments as PostCommentaire[],
-        shared: p.shared
+        shared: p.shared,
+        isLikedByUser: p.likedBy.includes(idUser)
     }));
 
     return objectsPosts;

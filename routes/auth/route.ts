@@ -1,91 +1,62 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { createHash } from "crypto";
-import { Pool } from "pg";
 import config from "../../config/config";
+import { io } from "../../index";
+import { isAuthenticated } from "../../middleware";
+import { getUser, updateConnectionStatus } from "../../database/Postgres.database";
+import { User } from "../../types/user.model";
 
 const authRouter = Router();
 
-const pool = new Pool({
-    user: config.postgres.USER,
-    host: config.postgres.HOST,
-    database: config.postgres.DB,
-    password: config.postgres.MDP,
-    port: config.postgres.PORT
-});
-
-authRouter.post('/login', (req, res) => {
+authRouter.post('/login', async (req: Request, res: Response) => {
     const { email, password } = req.body
 
-    pool.connect((err, client, done) => {
-        if (err) {
-            console.log('Error connecting to pg server' + err.stack);
-            res.status(500).json({
-                message: 'Error connecting to pg server'
-            });
-        } else {
-            console.log('Connection established / pg db server');
+    const user: User | null = await getUser(email);
+    if (user != null && user.motpasse == createHash('sha1').update(password).digest('hex')) {
+        updateConnectionStatus(Number(user.id), 1);
 
-            client?.query("SELECT * FROM fredouil.compte WHERE mail = '" + email + "';", (err, result) => {
-                if (err) {
-                    console.log('Erreur d’exécution de la requete' + err.stack);
-                    res.status(500).json({
-                        message: 'Erreur d’exécution de la requete'
-                    });
-                    return;
-                }
+        req.session.isConnected = true;
+        req.session.email = email;
+        req.session.idUser = Number(user.id);
+        req.session.username = user.pseudo;
+        req.session.save();
 
-                const user = result.rows[0];
-                if (user != null && user.motpasse == createHash('sha1').update(password).digest('hex')) {
-                    client.query("UPDATE fredouil.compte SET statut_connexion = 1 WHERE id = " + Number(user.id) + ";");
+        res.json({
+            idUser: Number(user.id),
+            email: email,
+            username: user.pseudo,
+            lastLogin: new Date(),
+            isConnected: true,
+        });
 
-                    req.session.isConnected = true;
-                    req.session.email = email;
-                    req.session.idUser = Number(user.id);
-                    req.session.save();
-
-                    console.log('Connexion établie');
-                    res.json({
-                        idUser: Number(user.id),
-                        email: email,
-                        username: user.pseudo,
-                        lastLogin: new Date(),
-                        isConnected: true,
-                    });
-                } else {
-                    console.log('Connexion échouée : identifiant ou mot de passe incorrecte');
-                    res.status(401).json({
-                        message: 'identifiant ou mot de passe incorrecte'
-                    });
-                }
-            });
-        }
-    });
+        io.emit('login', {
+            email: email,
+            pseudo: user.pseudo
+        });
+    } else {
+        res.status(401).json({
+            message: 'Identifiant ou mot de passe incorrecte'
+        });
+    }
 });
 
-authRouter.get('/logout', (req, res) => {
+authRouter.get('/logout', isAuthenticated, async (req: Request, res: Response) => {
     const idUser = req.session.idUser;
 
-    pool.connect((err, client, done) => {
-        if (err) {
-            console.log('Error connecting to pg server' + err.stack);
-            res.status(500).json({
-                message: 'Erreur de connexion à la base de données'
-            });
-        } else {
-            console.log('Connection established / pg db server');
+    await updateConnectionStatus(Number(idUser), 0);
 
-            client?.query("UPDATE fredouil.compte SET statut_connexion = 0 WHERE id = " + Number(idUser) + ";");
-        }
+    io.emit('user_disconnected', {
+        idUser: Number(idUser),
+        email: req.session.email,
+        isConnected: false,
     });
 
     req.session.destroy((err) => {
         if (err) {
-            console.log('Error destroying session' + err.stack);
             res.status(500).json({
                 message: 'Erreur de déconnexion'
             });
         } else {
-            console.log('Session destroyed');
             res.json({
                 message: 'Déconnecté'
             });

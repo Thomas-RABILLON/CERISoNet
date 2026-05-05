@@ -68,7 +68,10 @@
 
     <div class="flex justify-between items-center text-sm text-slate-500 py-3 border-t border-slate-100">
         <div class="flex items-center gap-6">
-            <button class="flex items-center gap-1.5 hover:text-red-500 transition-colors group">
+            <button
+                class="flex items-center gap-1.5 transition-colors group {{post().isLikedByUser ? 'text-red-500' : 'hover:text-red-500'}}"
+                [class.text-red-500]="post().isLikedByUser" [class.hover:text-red-500]="!post().isLikedByUser"
+                [class.fill-current]="post().isLikedByUser" (click)="likePost(post().id)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:fill-red-500/10" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

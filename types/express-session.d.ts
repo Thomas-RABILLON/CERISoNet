@@ -5,6 +5,7 @@ declare module "express-session" {
     isConnected?: boolean;
     email?: string;
     idUser?: number;
+    username?: string;
   }
 }
 

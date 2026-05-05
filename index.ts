@@ -2,6 +2,7 @@ import express from "express";
 import config from "./config/config";
 import router from "./routes/route";
 import session from "express-session";
+import { Server } from "socket.io";
 
 const MongoDBStore = require("connect-mongodb-session")(session);
 const https = require('https');
@@ -36,6 +37,17 @@ app.listen(config.port.HTTP, () => {
 	console.log('Server is running on port ' + config.port.HTTP);
 });
 
-https.createServer(options, app).listen(config.port.HTTPS, () => {
+const server = https.createServer(options, app);
+export const io = new Server(server);
+
+io.on('connection', (socket) => {
+	console.log('A user connected');
+
+	socket.on('disconnect', () => {
+		console.log('User disconnected');
+	});
+});
+
+server.listen(config.port.HTTPS, () => {
 	console.log('HTTPS => listening on ' + config.port.HTTPS);
 });

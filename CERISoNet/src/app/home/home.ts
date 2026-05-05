@@ -35,7 +35,7 @@ export class Home {
     });
 
     constructor() {
-        fetch('/api/posts/' + this.offset + '/' + this.nbPosts)
+        fetch('/api/posts/' + this.offset + '/' + this.nbPosts + '/date')
             .then(response => response.json())
             .then(data => {
                 this.posts.set(data);

@@ -2,7 +2,6 @@ import { ObjectId } from "mongodb";
 import { User } from "./user.model";
 
 interface PostReqCreation {
-    idUser: number;
     contenu: string;
     images: PostImage;
     date: string;
@@ -34,6 +33,7 @@ interface Post {
     hashtags: string[];
     comments: PostCommentaire[];
     shared: Post;
+    isLikedByUser: boolean;
 }
 
 interface PostCreation {

@@ -32,6 +32,7 @@ interface Post {
     hashtags: string[];
     comments: PostCommentaire[];
     shared: Post | undefined;
+    isLikedByUser: boolean;
 }
 
 export type { Post, PostCommentaire, PostImage, PostCreation };
