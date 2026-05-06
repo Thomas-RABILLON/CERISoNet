@@ -50,7 +50,7 @@ export class Home {
         this.nbPosts += 10;
 
         let nbTry = 0;
-        fetch('/api/posts/' + this.offset + '/' + this.nbPosts)
+        fetch('/api/posts/' + this.offset + '/' + this.nbPosts + '/date')
             .then(response => response.json())
             .then(data => {
                 this.posts.set([...this.posts(), ...data]);
@@ -67,7 +67,10 @@ export class Home {
     }
 
     isLoggedIn() {
-        return localStorage.getItem('isConnected') !== null;
+        if (typeof localStorage !== 'undefined') {
+            return localStorage.getItem('isConnected') !== null;
+        }
+        return false;
     }
 
     createPost() {

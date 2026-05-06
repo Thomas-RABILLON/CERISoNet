@@ -1,7 +1,7 @@
 interface User {
     id: number;
     mail: string;
-    motpasse: string;
+    motpasse?: string;
     pseudo: string;
     nom: string;
     prenom: string;

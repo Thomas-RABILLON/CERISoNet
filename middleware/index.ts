@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PostReqCreation } from "../types/post.model";
 import config from "../config/config";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     if (req.session?.isConnected && req.session?.idUser) {
@@ -62,7 +62,7 @@ const postExistMiddleware = async (req: Request, res: Response, next: NextFuncti
         const db = client.db();
         const collection = db.collection(config.mongo.POST_COLLECTION);
 
-        const post = await collection.findOne({ _id: idPost });
+        const post = await collection.findOne({ _id: new ObjectId(idPost) });
         if (!post) {
             res.status(404).json({
                 message: 'Post non trouvé'

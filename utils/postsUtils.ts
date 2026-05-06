@@ -61,7 +61,7 @@ const readyToSend = async (posts: any[], idUser: number): Promise<Post[]> => {
         hashtags: p.hashtags,
         comments: p.comments as PostCommentaire[],
         shared: p.shared,
-        isLikedByUser: p.likedBy.includes(idUser)
+        isLikedByUser: p.likedBy?.includes(idUser)
     }));
 
     return objectsPosts;

@@ -2,7 +2,9 @@ import { Injectable } from "@angular/core";
 import { Observable, throwError } from 'rxjs';
 import { io } from 'socket.io-client';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class webSocketService {
     socket;
     constructor() {

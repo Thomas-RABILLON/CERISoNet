@@ -10,7 +10,6 @@ const getPostCollection = async () => {
     const client = await MongoClient.connect(dnsMongoDB);
     const db = client.db();
     const collection = db.collection(config.mongo.POST_COLLECTION);
-    client.close();
     return collection;
 }
 

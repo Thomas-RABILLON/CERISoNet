@@ -16,8 +16,8 @@ export class App implements OnInit {
     webSocket: webSocketService;
     toastr = inject(ToastrService);
 
-    constructor(private _webSocket: webSocketService) {
-        this.webSocket = _webSocket;
+    constructor() {
+        this.webSocket = inject(webSocketService);
     }
 
     ngOnInit(): void {
@@ -26,13 +26,13 @@ export class App implements OnInit {
         });
 
         this.webSocket.listen('post_liked').subscribe((data: any) => {
-            if (data.createdBy !== localStorage.getItem('id')) {
+            if (typeof localStorage !== 'undefined' && data.createdBy !== localStorage.getItem('id')) {
                 this.toastr.info('Un utilisateur a liké votre post : ' + data.username, 'Like');
             }
         });
 
         this.webSocket.listen('post_commented').subscribe((data: any) => {
-            if (data.createdBy !== localStorage.getItem('id')) {
+            if (typeof localStorage !== 'undefined' && data.createdBy !== localStorage.getItem('id')) {
                 this.toastr.info('Un utilisateur a commenté votre post : ' + data.username, 'Commentaire');
             }
         });
@@ -47,11 +47,17 @@ export class App implements OnInit {
     }
 
     getUserName() {
-        return localStorage.getItem('username');
+        if (typeof localStorage !== 'undefined') {
+            return localStorage.getItem('username');
+        }
+        return '';
     }
 
     isLoggedIn() {
-        return localStorage.getItem('isConnected') === 'true';
+        if (typeof localStorage !== 'undefined') {
+            return localStorage.getItem('isConnected') === 'true';
+        }
+        return false;
     }
 
     logout() {
